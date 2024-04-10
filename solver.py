@@ -148,15 +148,35 @@ def word_tree_from_file(file: IO[str]) -> PrefixTreeNode:
     return tree
 
 
-def main():
-    with open("grid.txt") as grid_file:
+def main(argv: List[str]):
+    word_file = ""
+    grid_file = ""
+
+    if "-w" not in argv:
+        word_file = "words.txt"
+    else:
+        if argv.index("-w") < argv.index("-g"):
+            word_file = " ".join(argv[argv.index("-w")+1:argv.index("-g")])
+        else:
+            word_file = " ".join(argv[argv.index("-w")+1:len(argv)])
+
+    print(word_file)
+    if "-g" not in argv:
+        grid_file = "grid.txt"
+    else:
+        if argv.index("-w") > argv.index("-g"):
+            grid_file = " ".join(argv[argv.index("-g")+1:argv.index("-w")])
+        else:
+            grid_file = " ".join(argv[argv.index("-g")+1:len(argv)])
+
+    with open(grid_file) as grid_file:
         grid = grid_from_file(grid_file)
 
     print("Your Grid:")
 
     print(grid)
 
-    with open("words.txt") as words_file:
+    with open(word_file) as words_file:
         words = word_tree_from_file(words_file)
 
     found_words = find_words(grid, words)
@@ -174,12 +194,14 @@ def main():
     }
     while command != "exit":
         command = input("> ")
+        if command == "exit":
+            break
         words = command.split(" ")
         if len(words) >= 2 and words[0] + " " + words[1] in valid_commands.keys():
             command_func = valid_commands[words[0] + " " + words[1]]
             command_func(words[2:], found_words, grid)
         else:
-            print("Unknown command. Should be one of: " + ", ".join(valid_commands.keys()))
+            print("Unknown command. Should be one of: " + ", ".join(valid_commands.keys()))+", exit"
 
 
 def semantic_search(keys: List[str], found_words: Set[Word], grid: Grid):
@@ -262,4 +284,4 @@ def show_path(keys: List[str], found_words: Set[Word], grid: Grid):
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
