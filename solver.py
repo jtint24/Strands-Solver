@@ -257,10 +257,10 @@ def get_print_length(longest: bool) -> Callable[[List[str], Set[Word], Grid], No
             return
         length = keys[0]
         if length.isdigit():
-            word_list = list(found_words)
+            word_list = list({str(word) for word in found_words})
             prompts = sorted(
                 word_list,
-                key=lambda word: len(word.cells),
+                key=lambda word: len(word),
                 reverse=longest
             )[:int(length)]
             print(*[str(prompt) for prompt in prompts], sep="\n")
