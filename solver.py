@@ -128,6 +128,7 @@ def find_words(grid: Grid, words: PrefixTreeNode) -> Set[Word]:
     found_words = set()
     for cell in grid.cells():
         found_words = found_words.union(find_words_from_cell(cell, grid, words))
+        # print("X")
     return found_words
 
 
@@ -201,7 +202,7 @@ def main(argv: List[str]):
             command_func = valid_commands[words[0] + " " + words[1]]
             command_func(words[2:], found_words, grid)
         else:
-            print("Unknown command. Should be one of: " + ", ".join(valid_commands.keys()))+", exit"
+            print("Unknown command. Should be one of: " + ", ".join(valid_commands.keys())+", exit")
 
 
 def semantic_search(keys: List[str], found_words: Set[Word], grid: Grid):
